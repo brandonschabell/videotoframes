@@ -31,9 +31,16 @@ setup(
         'Topic :: Multimedia :: Video :: Conversion',
         'Topic :: Utilities'
     ],
+    python_requires='~=3.4',
     install_requires=[
         'opencv-python',
         'tqdm'
+    ],
+    tests_require=[
+        'pytest'
+    ],
+    setup_requires=[
+        'pytest-runner'
     ],
     entry_points={
       'console_scripts': ['videotoframes=videotoframes.video_to_frames:main']
