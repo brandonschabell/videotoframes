@@ -10,21 +10,21 @@ def test_main_no_arguments(capsys):
 	with pytest.raises(SystemExit) as e:
 		main()
 	captured = capsys.readouterr()
-	assert 'videotoframes: error: the following arguments are required: -o, -i' in captured.err
+	assert 'videotoframes: error: the following arguments are required: -o, -i' in captured[1]
 
 
 def test_main_no_output(capsys):
 	with pytest.raises(SystemExit) as e:
 		main(['-i', './'])
 	captured = capsys.readouterr()
-	assert 'videotoframes: error: the following arguments are required: -o\n' in captured.err
+	assert 'videotoframes: error: the following arguments are required: -o\n' in captured[1]
 
 
 def test_main_no_input(capsys):
 	with pytest.raises(SystemExit) as e:
 		main(['-o', './'])
 	captured = capsys.readouterr()
-	assert 'videotoframes: error: the following arguments are required: -i\n' in captured.err
+	assert 'videotoframes: error: the following arguments are required: -i\n' in captured[1]
 
 
 def test_main(tmpdir):
@@ -39,7 +39,7 @@ def test_main_max_frames(tmpdir):
 	      '--max-frames=10'])
 	frames = os.listdir(os.path.join(str(tmpdir), 'frames'))
 	assert len(frames) == 10
-	expected_frames = [f'small-frame{i:03d}.jpg' for i in range(0, 10)]
+	expected_frames = ['small-frame{:03d}.jpg'.format(i) for i in range(0, 10)]
 	assert set(frames) == set(expected_frames)
 
 
@@ -61,7 +61,7 @@ def test_main_max_frames_even_2_frames(tmpdir):
 	      '--even'])
 	frames = os.listdir(os.path.join(str(tmpdir), 'frames'))
 	assert len(frames) == 2
-	expected_frames = [f'small-frame{i:03d}.jpg' for i in [0, 165]]
+	expected_frames = ['small-frame{:03d}.jpg'.format(i) for i in [0, 165]]
 	assert set(frames) == set(expected_frames)
 
 
