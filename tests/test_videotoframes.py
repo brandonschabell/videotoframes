@@ -1,5 +1,6 @@
 import os
 import pytest
+import shutil
 
 from videotoframes.video_to_frames import main, get_frames_to_grab
 
@@ -103,3 +104,20 @@ def test_frame_grabber_4_frames_odd():
 def test_frame_grabber_6_frames_odd():
 	frames = get_frames_to_grab(frame_count=11, max_frames=6)
 	assert sorted(frames) == [0, 2, 4, 6, 8, 10]
+
+
+def test_multiple_videos(tmpdir):
+	shutil.copyfile(os.path.join(get_testfiles_path(), 'small.mp4'), os.path.join(str(tmpdir), 'small.mp4'))
+	shutil.copyfile(os.path.join(get_testfiles_path(), 'small.mp4'), os.path.join(str(tmpdir), 'small2.mp4'))
+	main(['-i', os.path.join(str(tmpdir)),
+	      '-o', os.path.join(str(tmpdir), 'frames')])
+	frames = os.listdir(os.path.join(str(tmpdir), 'frames'))
+	assert len(frames) == 332
+
+
+def test_empty_input(tmpdir):
+	tmpdir.mkdir('empty')
+	with pytest.raises(Exception) as e:
+		main(['-i', os.path.join(str(tmpdir), 'empty'),
+		      '-o', os.path.join(str(tmpdir), 'frames')])
+	assert 'No video selected.' in str(e)
