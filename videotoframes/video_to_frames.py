@@ -45,7 +45,7 @@ def video_to_frames(input_path, output_dir, max_frames, even):
     return True
 
 
-def main():
+def main(args=None):
     parser = argparse.ArgumentParser(prog='videotoframes')
     parser.add_argument('-o', required=True, help='output directory')
     parser.add_argument('-i', required=True, nargs='+', help='input video(s).')
@@ -54,7 +54,7 @@ def main():
     parser.add_argument('--even', action='store_true', help='If a "--max-frames" value is used, this will sample '
                                                             'frames from a uniform distribution as opposed to using '
                                                             'sequential frames.')
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     output_dir = args.o
 
     if len(output_dir) == 0:
