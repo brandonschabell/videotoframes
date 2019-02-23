@@ -4,6 +4,11 @@ import cv2
 from tqdm import tqdm
 
 
+def get_frames_to_grab(frame_count, max_frames):
+    span = (frame_count -1) / (max_frames - 1)
+    return [round(i * span) for i in range(max_frames)]
+
+
 def video_to_frames(input_path, output_dir, max_frames, even):
     if input_path is None:
         return None
@@ -18,12 +23,7 @@ def video_to_frames(input_path, output_dir, max_frames, even):
         max_frames = frame_count
 
     if even:
-        if frame_count % max_frames == 0:
-            span = frame_count // max_frames
-        else:
-            span = frame_count // (max_frames - 1)
-
-        grab_frames = [i for i in range(0, frame_count, span)]
+        grab_frames = get_frames_to_grab(frame_count=frame_count, max_frames=max_frames)
 
         for frame_num in grab_frames:
             video.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
@@ -37,8 +37,8 @@ def video_to_frames(input_path, output_dir, max_frames, even):
             ret, frame = video.read()
             if frame is None:
                 break
-            count += 1
             output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(count))
+            count += 1
             cv2.imwrite(output_path, frame)
 
     video.release()
