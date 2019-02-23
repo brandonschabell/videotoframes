@@ -6,6 +6,11 @@ this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+
+test_requirements = [
+    'pytest'
+]
+
 setup(
     name='videotoframes',
     version='0.1.1',
@@ -31,10 +36,18 @@ setup(
         'Topic :: Multimedia :: Video :: Conversion',
         'Topic :: Utilities'
     ],
+    python_requires='~=3.4',
     install_requires=[
         'opencv-python',
         'tqdm'
     ],
+    tests_require=test_requirements,
+    setup_requires=[
+        'pytest-runner'
+    ],
+    extras_require={
+      'tests': test_requirements
+    },
     entry_points={
       'console_scripts': ['videotoframes=videotoframes.video_to_frames:main']
     }
