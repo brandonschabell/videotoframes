@@ -8,10 +8,10 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='videotoframes',
-    version='0.1.0',
+    version='0.1.1',
     packages=find_packages(),
     url='https://github.com/brandonschabell/videotoframes',
-    download_url='https://github.com/brandonschabell/videotoframes/archive/v0.1.0.tar.gz',
+    download_url='https://github.com/brandonschabell/videotoframes/archive/v0.1.1.tar.gz',
     license='MIT',
     author='Brandon Schabell',
     author_email='brandonschabell@gmail.com',
