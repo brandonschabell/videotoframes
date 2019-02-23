@@ -5,7 +5,37 @@
 [![Build Status](https://travis-ci.com/brandonschabell/videotoframes.svg?branch=master)](https://travis-ci.com/brandonschabell/videotoframes)
 [![codecov](https://codecov.io/gh/brandonschabell/videotoframes/branch/master/graph/badge.svg)](https://codecov.io/gh/brandonschabell/videotoframes)
 
-A simple Python script to break videos into frames.
+A simple Python script to break videos into frames. This package does 
+**_NOT_ require ffmpeg**.
+
+## Installation
+VideoToFrames requires Python 3.4+
+
+```bash
+pip install videotoframes
+```
+
+## Example Usage:
+VideoToFrames can be run from any command prompt.
+
+Assuming there is a video at `./videos/example.mp4` and you want to create 
+frames in `./frames`:
+
+```bash
+videotoframes -i ./vidoes/example.mp4 -o ./frames
+```
+
+If you want to create a limited number of frames that are evenly distributed:
+
+```bash
+videotoframes -i ./videos/example.mp4 -o ./frames --max-frames=20 --even
+```
+
+You can also use VideoToFrames with many videos at once:
+
+```bash
+videotoframes -i ./videos -o ./frames
+```
 
 ## GitHub Project
 https://github.com/brandonschabell/videotoframes
