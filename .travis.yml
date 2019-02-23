@@ -15,7 +15,7 @@ install:
   - pip install -e .
 
 script:
-  - pytest --cov=./
+  - pytest --cov-report=xml --cov=videotoframes tests/
 
 after_success:
   - codecov
