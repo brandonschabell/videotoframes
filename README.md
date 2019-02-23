@@ -5,6 +5,9 @@
 
 A simple Python script to break videos into frames.
 
+## GitHub Project
+https://github.com/brandonschabell/videotoframes
+
 ## PyPi Project
 https://pypi.org/project/videotoframes/
 
