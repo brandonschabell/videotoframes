@@ -13,10 +13,10 @@ test_requirements = [
 
 setup(
     name='videotoframes',
-    version='0.1.1',
+    version='0.2.0',
     packages=find_packages(),
     url='https://github.com/brandonschabell/videotoframes',
-    download_url='https://github.com/brandonschabell/videotoframes/archive/v0.1.1.tar.gz',
+    download_url='https://github.com/brandonschabell/videotoframes/archive/v0.2.0.tar.gz',
     license='MIT',
     author='Brandon Schabell',
     author_email='brandonschabell@gmail.com',
