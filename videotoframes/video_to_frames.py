@@ -17,6 +17,13 @@ def video_to_frames(input_path, output_dir, max_frames, even):
 	base_filename = input_path.split(os.path.sep)[-1].split('.')[0]
 
 	frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+
+	video.set(cv2.CAP_PROP_POS_FRAMES, frame_count - 1)
+	ret, frame = video.read()
+	if frame is None:
+		frame_count -= 1
+	video.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
 	if max_frames is None:
 		max_frames = frame_count
 
@@ -29,6 +36,8 @@ def video_to_frames(input_path, output_dir, max_frames, even):
 			if frame is not None:
 				output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(frame_num))
 				cv2.imwrite(output_path, frame)
+			else:
+				break
 	else:
 		while count < max_frames:
 			ret, frame = video.read()
@@ -36,6 +45,8 @@ def video_to_frames(input_path, output_dir, max_frames, even):
 				output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(count))
 				count += 1
 				cv2.imwrite(output_path, frame)
+			else:
+				break
 
 	video.release()
 	return True

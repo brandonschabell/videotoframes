@@ -15,6 +15,12 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False):
 		frames = []
 
 		frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+		video.set(cv2.CAP_PROP_POS_FRAMES, frame_count - 1)
+		ret, frame = video.read()
+		if frame is None:
+			frame_count -= 1
+		video.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
 		if max_frames is None:
 			max_frames = frame_count
 
@@ -24,8 +30,11 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False):
 			for frame_num in grab_frames:
 				video.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
 				ret, frame = video.read()
-				ret, buffer = cv2.imencode('.jpg', frame)
-				frames.append(base64.b64encode(buffer))
+				if frame is not None:
+					ret, buffer = cv2.imencode('.jpg', frame)
+					frames.append(base64.b64encode(buffer))
+				else:
+					break
 		elif frame_rate is not None:
 			fps = video.get(cv2.CAP_PROP_FPS)
 			if frame_rate > fps:
@@ -48,6 +57,8 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False):
 					count += 1
 					ret, buffer = cv2.imencode('.jpg', frame)
 					frames.append(base64.b64encode(buffer))
+				else:
+					break
 
 		video.release()
 		return frames
