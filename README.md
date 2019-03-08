@@ -16,7 +16,8 @@ pip install videotoframes
 ```
 
 ## Example Usage:
-VideoToFrames can be run from any command prompt.
+VideoToFrames can be run from any command prompt or imported into a Python 
+project.
 
 Assuming there is a video at `./videos/example.mp4` and you want to create 
 frames in `./frames`:
@@ -35,6 +36,14 @@ You can also use VideoToFrames with many videos at once:
 
 ```bash
 videotoframes -i ./videos -o ./frames
+```
+
+Using VideoToFrames in a Python project:
+```python
+from videotoframes import convert
+
+video_base_64 = '...'
+frames = convert(video_base_64=video_base_64, max_frames=10, frame_rate=1)
 ```
 
 ## GitHub Project
