@@ -40,7 +40,8 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False):
 			if frame_rate > fps:
 				frame_rate = fps
 			time_stamp = 0
-			while count < max_frames:
+			max_timestamp = frame_count * 1000 / fps
+			while count < max_frames and time_stamp <= max_timestamp:
 				video.set(cv2.CAP_PROP_POS_MSEC, round(time_stamp))
 				ret, frame = video.read()
 				if frame is not None:
