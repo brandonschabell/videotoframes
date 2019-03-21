@@ -133,5 +133,5 @@ def test_convert_video_timestamp():
 			'2019-02-10 20:25:00',
 			'2019-02-10 20:25:00',
 			'2019-02-10 20:25:00',
-			'2019-02-10 20:25:00',
-			'2019-02-10 20:25:00'] == [frame['timestamp'] for frame in frames]
+			'2019-02-10 20:25:01',
+			'2019-02-10 20:25:01'] == [frame['timestamp'] for frame in frames]

@@ -54,8 +54,8 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
 						}
 						if video_timestamp != None:
 							frame_offset_ms = video.get(cv2.CAP_PROP_POS_MSEC)
-							video_datetime + timedelta(milliseconds=frame_offset_ms)
-							return_frame['timestamp'] = video_datetime.strftime(DATE_TIME_FORMAT)
+							frame_datetime = video_datetime + timedelta(milliseconds=frame_offset_ms)
+							return_frame['timestamp'] = frame_datetime.strftime(DATE_TIME_FORMAT)
 					frames.append(return_frame)
 				else:
 					break
@@ -78,8 +78,8 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
 						}
 						if video_timestamp != None:
 							frame_offset_ms = video.get(cv2.CAP_PROP_POS_MSEC)
-							video_datetime + timedelta(milliseconds=frame_offset_ms)
-							return_frame['timestamp'] = video_datetime.strftime(DATE_TIME_FORMAT)
+							frame_datetime = video_datetime + timedelta(milliseconds=frame_offset_ms)
+							return_frame['timestamp'] = frame_datetime.strftime(DATE_TIME_FORMAT)
 					frames.append(return_frame)
 				else:
 					break
@@ -97,8 +97,8 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
 						}
 						if video_timestamp != None:
 							frame_offset_ms = video.get(cv2.CAP_PROP_POS_MSEC)
-							video_datetime + timedelta(milliseconds=frame_offset_ms)
-							return_frame['timestamp'] = video_datetime.strftime(DATE_TIME_FORMAT)
+							frame_datetime = video_datetime + timedelta(milliseconds=frame_offset_ms)
+							return_frame['timestamp'] = frame_datetime.strftime(DATE_TIME_FORMAT)
 					frames.append(return_frame)
 				else:
 					break
