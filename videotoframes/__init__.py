@@ -31,7 +31,7 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
 
 		frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 		video.set(cv2.CAP_PROP_POS_FRAMES, frame_count - 1)
-		ret, frame = video.read()
+		_, frame = video.read()
 		if frame is None:
 			frame_count -= 1
 		video.set(cv2.CAP_PROP_POS_FRAMES, 0)
