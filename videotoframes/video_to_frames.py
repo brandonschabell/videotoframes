@@ -32,7 +32,7 @@ def video_to_frames(input_path, output_dir, max_frames, even):
 
         for frame_num in grab_frames:
             video.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
-            ret, frame = video.read()
+            _, frame = video.read()
             if frame is not None:
                 output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(frame_num))
                 cv2.imwrite(output_path, frame)
@@ -40,7 +40,7 @@ def video_to_frames(input_path, output_dir, max_frames, even):
                 break
     else:
         while count < max_frames:
-            ret, frame = video.read()
+            _, frame = video.read()
             if frame is not None:
                 output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(count))
                 count += 1

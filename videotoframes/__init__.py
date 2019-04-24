@@ -45,9 +45,9 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
 
             for frame_num in grab_frames:
                 video.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
-                ret, frame = video.read()
+                _, frame = video.read()
                 if frame is not None:
-                    ret, buffer = cv2.imencode('.jpg', frame)
+                    _, buffer = cv2.imencode('.jpg', frame)
                     return_frame = base64.b64encode(buffer)
                     if return_dict:
                         return_frame = {
@@ -68,10 +68,10 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
             max_timestamp = frame_count * 1000 / fps
             while count < max_frames and time_stamp <= max_timestamp:
                 video.set(cv2.CAP_PROP_POS_MSEC, round(time_stamp))
-                ret, frame = video.read()
+                _, frame = video.read()
                 if frame is not None:
                     count += 1
-                    ret, buffer = cv2.imencode('.jpg', frame)
+                    _, buffer = cv2.imencode('.jpg', frame)
                     return_frame = base64.b64encode(buffer)
                     if return_dict:
                         return_frame = {
@@ -87,10 +87,10 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
                 time_stamp += 1000 / frame_rate
         else:
             while count < max_frames:
-                ret, frame = video.read()
+                _, frame = video.read()
                 if frame is not None:
                     count += 1
-                    ret, buffer = cv2.imencode('.jpg', frame)
+                    _, buffer = cv2.imencode('.jpg', frame)
                     return_frame = base64.b64encode(buffer)
                     if return_dict:
                         return_frame = {
