@@ -1,10 +1,10 @@
 # VideoToFrames
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/526793a7c9a24f4282cd97c1655dca86)](https://app.codacy.com/app/brandonschabell/videotoframes?utm_source=github.com&utm_medium=referral&utm_content=brandonschabell/videotoframes&utm_campaign=Badge_Grade_Dashboard)
 [![PyPI version](https://badge.fury.io/py/videotoframes.svg)](https://badge.fury.io/py/videotoframes)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/videotoframes.svg)](https://pypi.python.org/pypi/videotoframes/)
 [![Build Status](https://travis-ci.com/brandonschabell/videotoframes.svg?branch=master)](https://travis-ci.com/brandonschabell/videotoframes)
 [![codecov](https://codecov.io/gh/brandonschabell/videotoframes/branch/master/graph/badge.svg)](https://codecov.io/gh/brandonschabell/videotoframes)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/526793a7c9a24f4282cd97c1655dca86)](https://app.codacy.com/app/brandonschabell/videotoframes?utm_source=github.com&utm_medium=referral&utm_content=brandonschabell/videotoframes&utm_campaign=Badge_Grade_Dashboard)
 
 A simple Python script to break videos into frames. This package does 
 **_NOT_ require ffmpeg**.
