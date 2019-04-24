@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 
 def get_frames_to_grab(frame_count, max_frames):
-    span = (frame_count -1) / (max_frames - 1)
+    span = (frame_count - 1) / (max_frames - 1)
     return [round(i * span) for i in range(max_frames)]
 
 
@@ -19,7 +19,7 @@ def video_to_frames(input_path, output_dir, max_frames, even):
     frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
     video.set(cv2.CAP_PROP_POS_FRAMES, frame_count - 1)
-    ret, frame = video.read()
+    _, frame = video.read()
     if frame is None:
         frame_count -= 1
     video.set(cv2.CAP_PROP_POS_FRAMES, 0)
