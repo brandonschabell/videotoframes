@@ -117,21 +117,53 @@ def test_convert_dictionary_return():
 	assert len(frames) == 5
 	for frame in frames:
 		assert isinstance(frame, dict)
-		assert set(frame.keys()) == {'base64image'}
+		assert set(frame.keys()) == {'base64image', 'frameNumber'}
 	assert frames[0] != frames[-1]
 
 
 def test_convert_video_timestamp():
 	with open(os.path.join(get_testfiles_path(), 'small.mp4'), 'rb') as file:
 		video_base_64 = base64.b64encode(file.read()).decode()
+	frames = convert(video_base_64, max_frames=6, video_timestamp='2019-02-10 20:25:00')
+	assert len(frames) == 6
+	for frame in frames:
+		assert isinstance(frame, dict)
+		assert set(frame.keys()) == {'base64image', 'frameNumber', 'timestamp'}
+	assert ['2019-02-10 20:25:00',
+			'2019-02-10 20:25:00',
+			'2019-02-10 20:25:00',
+			'2019-02-10 20:25:00',
+			'2019-02-10 20:25:00',
+			'2019-02-10 20:25:00'] == [frame['timestamp'] for frame in frames]
+
+
+def test_convert_video_timestamp_frame_rate():
+	with open(os.path.join(get_testfiles_path(), 'small.mp4'), 'rb') as file:
+		video_base_64 = base64.b64encode(file.read()).decode()
 	frames = convert(video_base_64, max_frames=6, frame_rate=4, video_timestamp='2019-02-10 20:25:00')
 	assert len(frames) == 6
 	for frame in frames:
 		assert isinstance(frame, dict)
-		assert set(frame.keys()) == {'base64image', 'timestamp'}
+		assert set(frame.keys()) == {'base64image', 'frameNumber', 'timestamp'}
 	assert ['2019-02-10 20:25:00',
 			'2019-02-10 20:25:00',
 			'2019-02-10 20:25:00',
 			'2019-02-10 20:25:00',
 			'2019-02-10 20:25:01',
 			'2019-02-10 20:25:01'] == [frame['timestamp'] for frame in frames]
+
+
+def test_convert_video_timestamp_even():
+	with open(os.path.join(get_testfiles_path(), 'small.mp4'), 'rb') as file:
+		video_base_64 = base64.b64encode(file.read()).decode()
+	frames = convert(video_base_64, max_frames=6, even=True, video_timestamp='2019-02-10 20:25:00')
+	assert len(frames) == 6
+	for frame in frames:
+		assert isinstance(frame, dict)
+		assert set(frame.keys()) == {'base64image', 'frameNumber', 'timestamp'}
+	assert ['2019-02-10 20:25:00',
+			'2019-02-10 20:25:01',
+			'2019-02-10 20:25:02',
+			'2019-02-10 20:25:03',
+			'2019-02-10 20:25:04',
+			'2019-02-10 20:25:05'] == [frame['timestamp'] for frame in frames]

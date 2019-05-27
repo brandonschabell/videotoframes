@@ -1,54 +1,25 @@
 import argparse
+import base64
 import os
-import cv2
 from tqdm import tqdm
 
-
-def get_frames_to_grab(frame_count, max_frames):
-    span = (frame_count - 1) / (max_frames - 1)
-    return [round(i * span) for i in range(max_frames)]
+from videotoframes import convert
 
 
 def video_to_frames(input_path, output_dir, max_frames, even):
-    video = cv2.VideoCapture(input_path)
-
-    count = 0
-
     base_filename = input_path.split(os.path.sep)[-1].split('.')[0]
 
-    frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+    with open(input_path, 'rb') as file:
+        video_base_64 = base64.b64encode(file.read())
 
-    video.set(cv2.CAP_PROP_POS_FRAMES, frame_count - 1)
-    _, frame = video.read()
-    if frame is None:
-        frame_count -= 1
-    video.set(cv2.CAP_PROP_POS_FRAMES, 0)
+    frames = convert(video_base_64=video_base_64, frame_rate=None, max_frames=max_frames, even=even, return_dict=True)
+    for frame in frames:
+        base_64_image = frame['base64image']
+        frame_number = frame['frameNumber']
+        output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(frame_number))
+        with open(output_path, 'wb') as file:
+            file.write(base_64_image)
 
-    if max_frames is None:
-        max_frames = frame_count
-
-    if even:
-        grab_frames = get_frames_to_grab(frame_count=frame_count, max_frames=max_frames)
-
-        for frame_num in grab_frames:
-            video.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
-            _, frame = video.read()
-            if frame is not None:
-                output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(frame_num))
-                cv2.imwrite(output_path, frame)
-            else:
-                break
-    else:
-        while count < max_frames:
-            _, frame = video.read()
-            if frame is not None:
-                output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(count))
-                count += 1
-                cv2.imwrite(output_path, frame)
-            else:
-                break
-
-    video.release()
     return True
 
 
