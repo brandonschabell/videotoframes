@@ -4,9 +4,12 @@ from datetime import datetime, timedelta
 from tempfile import NamedTemporaryFile
 import warnings
 
-from videotoframes.video_to_frames import get_frames_to_grab
-
 DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+
+def get_frames_to_grab(frame_count, max_frames):
+    span = (frame_count - 1) / (max_frames - 1)
+    return [round(i * span) for i in range(max_frames)]
 
 
 def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_timestamp=None, return_dict=False):
@@ -43,20 +46,12 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
         if even:
             grab_frames = get_frames_to_grab(frame_count=frame_count, max_frames=max_frames)
 
-            for frame_num in grab_frames:
-                video.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+            for frame_number in grab_frames:
+                video.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
                 _, frame = video.read()
                 if frame is not None:
                     _, buffer = cv2.imencode('.jpg', frame)
-                    return_frame = base64.b64encode(buffer)
-                    if return_dict:
-                        return_frame = {
-                            'base64image': return_frame
-                        }
-                        if video_timestamp is not None:
-                            frame_offset_ms = video.get(cv2.CAP_PROP_POS_MSEC)
-                            frame_datetime = video_timestamp + timedelta(milliseconds=frame_offset_ms)
-                            return_frame['timestamp'] = frame_datetime.strftime(DATE_TIME_FORMAT)
+                    return_frame = get_return_frame(buffer, return_dict, video, video_timestamp, frame_number)
                     frames.append(return_frame)
                 else:
                     break
@@ -70,18 +65,10 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
                 video.set(cv2.CAP_PROP_POS_MSEC, round(time_stamp))
                 _, frame = video.read()
                 if frame is not None:
-                    count += 1
                     _, buffer = cv2.imencode('.jpg', frame)
-                    return_frame = base64.b64encode(buffer)
-                    if return_dict:
-                        return_frame = {
-                            'base64image': return_frame
-                        }
-                        if video_timestamp is not None:
-                            frame_offset_ms = video.get(cv2.CAP_PROP_POS_MSEC)
-                            frame_datetime = video_timestamp + timedelta(milliseconds=frame_offset_ms)
-                            return_frame['timestamp'] = frame_datetime.strftime(DATE_TIME_FORMAT)
+                    return_frame = get_return_frame(buffer, return_dict, video, video_timestamp, count)
                     frames.append(return_frame)
+                    count += 1
                 else:
                     break
                 time_stamp += 1000 / frame_rate
@@ -89,20 +76,26 @@ def convert(video_base_64, frame_rate=None, max_frames=None, even=False, video_t
             while count < max_frames:
                 _, frame = video.read()
                 if frame is not None:
-                    count += 1
                     _, buffer = cv2.imencode('.jpg', frame)
-                    return_frame = base64.b64encode(buffer)
-                    if return_dict:
-                        return_frame = {
-                            'base64image': return_frame
-                        }
-                        if video_timestamp is not None:
-                            frame_offset_ms = video.get(cv2.CAP_PROP_POS_MSEC)
-                            frame_datetime = video_timestamp + timedelta(milliseconds=frame_offset_ms)
-                            return_frame['timestamp'] = frame_datetime.strftime(DATE_TIME_FORMAT)
+                    return_frame = get_return_frame(buffer, return_dict, video, video_timestamp, count)
                     frames.append(return_frame)
+                    count += 1
                 else:
                     break
 
         video.release()
         return frames
+
+
+def get_return_frame(buffer, return_dict, video, video_timestamp, frame_number):
+    return_frame = base64.b64encode(buffer)
+    if return_dict:
+        return_frame = {
+            'base64image': return_frame,
+            'frameNumber': frame_number
+        }
+        if video_timestamp is not None:
+            frame_offset_ms = video.get(cv2.CAP_PROP_POS_MSEC)
+            frame_datetime = video_timestamp + timedelta(milliseconds=frame_offset_ms)
+            return_frame['timestamp'] = frame_datetime.strftime(DATE_TIME_FORMAT)
+    return return_frame
