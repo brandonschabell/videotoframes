@@ -2,7 +2,8 @@ import os
 import pytest
 import shutil
 
-from videotoframes.video_to_frames import main, get_frames_to_grab
+from videotoframes import get_frames_to_grab
+from videotoframes.video_to_frames import main
 
 from tests.utilities import get_testfiles_path
 
