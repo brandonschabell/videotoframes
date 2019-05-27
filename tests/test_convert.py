@@ -103,7 +103,7 @@ def test_convert_deprecate_list_response():
 	with warnings.catch_warnings(record=True) as w:
 		# Cause all warnings to always be triggered.
 		warnings.simplefilter("always")
-		convert(video_base_64, max_frames=13, frame_rate=2)
+		convert(video_base_64, max_frames=13, frame_rate=2, return_dict=False)
 
 		assert len(w) == 1
 		assert issubclass(w[-1].category, DeprecationWarning)
