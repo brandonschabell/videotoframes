@@ -1,3 +1,4 @@
+import cv2
 import os
 import pytest
 import shutil
@@ -9,21 +10,21 @@ from tests.utilities import get_testfiles_path
 
 
 def test_main_no_arguments(capsys):
-	with pytest.raises(SystemExit) as e:
+	with pytest.raises(SystemExit):
 		main()
 	captured = capsys.readouterr()
 	assert 'videotoframes: error: the following arguments are required: -o, -i' in captured[1]
 
 
 def test_main_no_output(capsys):
-	with pytest.raises(SystemExit) as e:
+	with pytest.raises(SystemExit):
 		main(['-i', './'])
 	captured = capsys.readouterr()
 	assert 'videotoframes: error: the following arguments are required: -o\n' in captured[1]
 
 
 def test_main_no_input(capsys):
-	with pytest.raises(SystemExit) as e:
+	with pytest.raises(SystemExit):
 		main(['-o', './'])
 	captured = capsys.readouterr()
 	assert 'videotoframes: error: the following arguments are required: -i\n' in captured[1]
@@ -65,6 +66,17 @@ def test_main_max_frames_even_2_frames(tmpdir):
 	assert len(frames) == 2
 	expected_frames = ['small-frame{:03d}.jpg'.format(i) for i in [0, 165]]
 	assert set(frames) == set(expected_frames)
+
+
+def test_main_frame_content(tmpdir):
+	main(['-i', os.path.join(get_testfiles_path(), 'small.mp4'),
+	      '-o', os.path.join(str(tmpdir), 'frames'),
+	      '--max-frames=1'])
+	frames = os.listdir(os.path.join(str(tmpdir), 'frames'))
+	frame_path = os.path.join(str(tmpdir), 'frames', frames[0])
+	image = cv2.imread(frame_path)
+	assert image is not None
+	assert image.shape == (320, 560, 3)
 
 
 def test_frame_grabber_2_frames_even():
@@ -118,7 +130,6 @@ def test_multiple_videos(tmpdir):
 
 def test_empty_input(tmpdir):
 	tmpdir.mkdir('empty')
-	with pytest.raises(Exception) as e:
+	with pytest.raises(Exception, match='No video selected.') as e:
 		main(['-i', os.path.join(str(tmpdir), 'empty'),
 		      '-o', os.path.join(str(tmpdir), 'frames')])
-	assert 'No video selected.' in str(e)
