@@ -18,7 +18,7 @@ def video_to_frames(input_path, output_dir, max_frames, even):
         frame_number = frame['frameNumber']
         output_path = os.path.join(output_dir, base_filename + '-frame{:03d}.jpg'.format(frame_number))
         with open(output_path, 'wb') as file:
-            file.write(base_64_image)
+            file.write(base64.b64decode(base_64_image))
 
     return True
 

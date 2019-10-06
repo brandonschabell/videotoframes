@@ -1,3 +1,4 @@
+import cv2
 import os
 import pytest
 import shutil
@@ -65,6 +66,17 @@ def test_main_max_frames_even_2_frames(tmpdir):
 	assert len(frames) == 2
 	expected_frames = ['small-frame{:03d}.jpg'.format(i) for i in [0, 165]]
 	assert set(frames) == set(expected_frames)
+
+
+def test_main_frame_content(tmpdir):
+	main(['-i', os.path.join(get_testfiles_path(), 'small.mp4'),
+	      '-o', os.path.join(str(tmpdir), 'frames'),
+	      '--max-frames=1'])
+	frames = os.listdir(os.path.join(str(tmpdir), 'frames'))
+	frame_path = os.path.join(str(tmpdir), 'frames', frames[0])
+	image = cv2.imread(frame_path)
+	assert image is not None
+	assert image.shape == (320, 560, 3)
 
 
 def test_frame_grabber_2_frames_even():
